@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+
+  <persistence-unit name="primaryDB" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.apress.javaee6.chapter02.Book</class>
+    <properties>
+      <property name="eclipselink.target-database" value="MYSQL"/>
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://ec2-50-19-213-178.compute-1.amazonaws.com:3306/dailybalan-800;create=false"/>
+      <property name="javax.persistence.jdbc.user" value="dailybalan-800"/>
+      <property name="javax.persistence.jdbc.password" value="a1eae99c8c474eeab4d53bc02ceb6820"/>
+    </properties>
+  </persistence-unit>
+  
+  <jta-data-source>jdbc/primaryDB</jta-data-source>
+</persistence>

@@ -1,0 +1,78 @@
+package com.fmt.rest.service;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
+
+ //see: http://www.ibm.com/developerworks/web/library/wa-aj-tomcat/index.html
+//java.lang.ClassNotFoundException: com.sun.jersey.spi.container.servlet.ServletContainer
+//java.lang.ClassNotFoundException: com.sun.jersey.spi.container.servlet.ServletContainer
+@Path("/db")
+public class HelloDatabase {
+	  private Connection connect = null;
+	  private Statement statement = null;
+	  private PreparedStatement preparedStatement = null;
+	  private ResultSet resultSet = null;
+	  
+		public static final String JDBC_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+		public final static String SQL_STATEMENT = "select * from keyvalue";
+		public final static String DB_URL = "jdbc:mysql://ec2-50-19-213-178.compute-1.amazonaws.com/fmt-test?"
+				+ "user=ftaylor92&password=matt8888";
+
+	  
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String dbQuery() {
+		String ffoo= "unfound";
+		
+		Map<String, String> mm= new HashMap<String, String>();
+		mm.putIfAbsent("girl", "Robin");
+		List<Schema> ss= new ArrayList<Schema>();
+		
+		try {
+			Class.forName(JDBC_DRIVER_CLASS_NAME);
+			
+			try (Connection c = DriverManager.getConnection(DB_URL)) {
+				
+			    DSL.using(c).fetch(SQL_STATEMENT)
+
+			       // We can use lambda expressions to map jOOQ Records
+			       .map(rs -> new Schema(
+			           rs.getValue("name", String.class),
+			           rs.getValue("value", String.class)
+			       ))
+
+			       // ... and then profit from the new Collection methods
+			       .forEach(System.out::println);
+			       //.forEach(x -> ss.add(x));
+			       
+			} catch(SQLException ex) {
+				
+			}
+		} catch (ClassNotFoundException | DataAccessException
+				| IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+
+		/*for(Schema s : ss) {
+			ffoo= s.name;
+		}*/
+		
+		return mm.get("girl")+"\n"; //ffoo;
+	}
+}   

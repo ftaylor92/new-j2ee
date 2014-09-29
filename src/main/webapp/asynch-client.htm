@@ -1,0 +1,33 @@
+<html>
+<head></head>
+<body>
+<script type="text/javascript">
+function GetMessage() {
+debugger;
+var url = "WebService.asmx";
+var result = GetSynchronousJSONResponse(url + '/Test', '{"Name": "Ram"}');
+document.getElementById("<%= txtMessage.ClientID%>").value = eval('(' + result + ').d');
+}
+function GetMessageByAsync() {
+ 
+$.ajax({
+type: "POST",
+url: "WebService.asmx/Test",
+data: '{"Name": "Ram"}',
+contentType: "application/json; charset=utf-8",
+dataType: "json",
+success: function (res) { callback_response(res) },
+error: function (res) { error_response(res) }
+});
+}
+function callback_response(res) {
+debugger;
+document.getElementById("<%= txtMessage.ClientID%>").value = res.d;
+}
+function error_response(res) {
+debugger;
+alert(res);
+}
+< /script>
+</body>
+</html>
