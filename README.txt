@@ -46,3 +46,24 @@ http://new-j2EE.fmtmac2.cloudbees.net
 mvn clean compile package
 #fails: bees app:deploy target/full-j2EE.war - fmtmac2/new-j2EE
 goto: cloudbees site, then hit Apps, new-j2EE, upload WAR file, select target/full-j2EE.war
+
+for heroku:
+git init
+git add pom.xml README.txt src/
+git status
+git remote add origin https://github.com/ftaylor92/mathematics.git
+git push -u origin master
+git pull
+heroku create
+heroku apps:rename <app-name>
+git push heroku master
+mvn clean compile package
+ 
+heroku config
+vi system.properties
+git add system.properties 
+git commit -m "system.properties"
+git push heroku master
+heroku ps:scale web=1
+heroku open
+
